@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Rejestracja";
+}
+
+<h2>Rejestracja</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="username">Nazwa użytkownika</label>
+        <input type="text" id="username" name="username" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="password">Hasło</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success">Zarejestruj</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger mt-3">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
