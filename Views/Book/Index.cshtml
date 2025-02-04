@@ -1,0 +1,58 @@
+﻿@model IEnumerable<PortalKsiazkowy.Models.Book>
+
+@{
+    ViewData["Title"] = "Przeglądaj Książki";
+}
+
+<form asp-action="Index" method="get">
+    <input type="text" name="searchString" value="@ViewBag.SearchString" placeholder="Wyszukaj książki..." class="form-control mb-3" />
+    <button type="submit" class="btn btn-primary">Szukaj</button>
+</form>
+
+<div class="container">
+    <h1 class="my-4">Przeglądaj książki</h1>
+    <div class="row">
+        @foreach (var book in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">Autor: @book.Author</p>
+                        <p class="card-text">Gatunek: @book.Genre</p>
+                        <p class="card-text">Średnia ocena: @book.AverageRating.ToString("F1")</p>
+                        <a href="@Url.Action("Details", "Book", new { id = book.Id })" class="btn btn-primary">Zobacz szczegóły</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Paginacja -->
+    <div class="pagination mt-4">
+        <nav>
+            <ul class="pagination">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { searchString = ViewBag.SearchString, pageNumber = ViewBag.CurrentPage - 1 })">Poprzednia</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { searchString = ViewBag.SearchString, pageNumber = i })">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { searchString = ViewBag.SearchString, pageNumber = ViewBag.CurrentPage + 1 })">Następna</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
